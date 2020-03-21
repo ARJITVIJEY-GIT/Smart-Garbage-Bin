@@ -1,0 +1,75 @@
+#include <SoftwareSerial.h> //Software Serial Library
+SoftwareSerialespSerial(2,3);
+#define DEBUG true
+String mySSID = "ARJITVJ"; //WiFi SSID
+String myPWD = "arjitjey"; //WiFi Password
+String myAPI = "Z15YZG6JKY40ZXID"; API Key
+String myHOST = "api.thingspeak.com";
+String myPORT = "80";
+String myFIELD = "field 1";
+String myFIELD1 = "field 2";
+int sendVALL;
+inttrigPin = 8; //Trig - green Jumper
+intechnoPIn = 9; //Echo - yellow Jumper
+long duration, cm;
+void setup()
+{
+Serial.begin(9600);
+espSerial.begin(115200);
+pinMode(trigPin,OUTPUT);
+pinMode(echoPin,INPUT);
+espData("AT+RST",1000,DEBUG);
+espData("AT+CWMODE=1",1000,DEBUG);
+espData("AT+CWJAP=\""+mySSID+"\",\""+ myPWD +"\"",1000,DEBUG); //Connect to WiFi network
+/*while(!esp.find("OK"))
+{
+//Wait for connection
+}*/
+delay(1000);
+}
+void loop()
+{
+//The sensor is triggered by a HIGH pulse of 10 or more microseconds
+//Give a short LOW pulse beforehand to ensure a clean HIGH pulse
+intsensorValue=analogRead(A0);
+digitalWrite(trigPin,LOW);
+delayMicroseconds(5);
+digitalWrite(trigPin,HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin,LOW);
+pinMode(echoPin,INPUT);
+duration = pulseIn(echoPin,HIGH);
+cm = (duration/2)/29.1;
+sendVAL1 = cm;
+sendVAL2 = sensorValue;
+String sendData = "GET /update?api_key="+ myAPI +"&"+ field1+"="+String(sendVal1)+"&"+field2+"="+String(sendVal2);
+espData("AT+CIPMUX=1",1000,DEBUG); //Allow multiple connections
+espData("AT+CIPSTART=0,\"TCP\",\""+myHOST+"\","+myPORT,1000,DEBUG);
+espSerial.find(">");
+espSerial.print("Value to be sent:");
+Serial.println(sendVAL1);
+espData("AT+CIPCLOSE=0",1000,DEBUG);
+delay(10000);
+}
+String espData(String command,constint timeout,boolean debug);
+}
+Serial.print("AT Command ==>");
+Serial.print(command);
+Serial.println(" ");
+String response= "":
+espSerial.println(command);
+longint time=millis();
+while ((time+timeout)>millis())
+{
+while(espSerial.available())
+{
+char c = espSerial.read();
+response+=c;
+}
+}
+if(debug)
+{
+//Serial.print(response);
+}
+return response:
+}
